@@ -13,212 +13,230 @@ using System.IO;
 
 namespace OpenTKNeHeTut2
 {
-    internal class Game : GameWindow
-    {
-        private float[] triangle =
-        {
-             0.0f, 1.0f, 0.0f,  // Top
-            -1.0f,-1.0f, 0.0f,  // Bottom Left
-             1.0f,-1.0f, 0.0f   // Bottom Right
-        };
+	internal class Game : GameWindow
+	{
+		private float[] triangle =
+		{
+			0.0f, 1.0f, 0.0f,  // Top
+			-1.0f,-1.0f, 0.0f,  // Bottom Left
+			1.0f,-1.0f, 0.0f   // Bottom Right
+		};
 
-        private float[] square =
-        {
-            -1.0f, -1.0f, 0.0f, // Bottom left
-            -1.0f,  1.0f, 0.0f, // Top left            
-             1.0f, -1.0f, 0.0f, // Bottom right
-             1.0f,  1.0f, 0.0f  // Top right             
-        };
+		private float[] square =
+		{
+			-1.0f, -1.0f, 0.0f, // Bottom left
+			-1.0f,  1.0f, 0.0f, // Top left            
+			1.0f, -1.0f, 0.0f, // Bottom right
+			1.0f,  1.0f, 0.0f  // Top right             
+		};
 
-        private bool isFullscreen = false;
-        private int triangleVao, triangleVbo, squareVao, squareVbo;
-        private int program;
-        private int MVPLocation, translateLocation;
-        private Matrix4 projectionMatrix4, modelMatrix4;
+		private bool isFullscreen = false;
+		private int triangleVao, triangleVbo, squareVao, squareVbo;
+		private int program;
+		private int MVPLocation, translateLocation;
+		private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
 
-        public Game()
-            : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 3")
-        {
-            VSync = VSyncMode.On;
-        }
+		public Game()
+			: base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
+		{
+			VSync = VSyncMode.On;
+		}
 
-        private void GenerateBuffers()
-        {
-            // Generate Vertex array object
-            GL.GenVertexArrays(1, out triangleVao);
-            GL.BindVertexArray(triangleVao);
+		private void GenerateBuffers()
+		{
+			// Generate Vertex array object
+			GL.GenVertexArrays(1, out triangleVao);
+			GL.BindVertexArray(triangleVao);
 
-            // Vertices
-            GL.GenBuffers(1, out triangleVbo);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, triangleVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangle.Length * sizeof(float)), triangle, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+			// Vertices
+			GL.GenBuffers(1, out triangleVbo);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, triangleVbo);
+			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangle.Length * sizeof(float)), triangle, BufferUsageHint.StaticDraw);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attribute
-            GL.EnableVertexAttribArray(0);
-            
-            // Generate Vertex array object
-            GL.GenVertexArrays(1, out squareVao);
-            GL.BindVertexArray(squareVao);
+			// Enable the position attribute
+			GL.EnableVertexAttribArray(0);
 
-            // Vertices
-            GL.GenBuffers(1, out squareVbo);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(square.Length * sizeof(float)), square, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+			// Generate Vertex array object
+			GL.GenVertexArrays(1, out squareVao);
+			GL.BindVertexArray(squareVao);
 
-            // Enable the position attribute
-            GL.EnableVertexAttribArray(0);            
-        }
+			// Vertices
+			GL.GenBuffers(1, out squareVbo);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
+			GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(square.Length * sizeof(float)), square, BufferUsageHint.StaticDraw);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-        private void InitScene()
-        {
-            // Set up uniform locations
-            GL.UseProgram(program);
-            MVPLocation = GL.GetUniformLocation(program, "MVP");
-            translateLocation = GL.GetUniformLocation(program, "translate");
+			// Enable the position attribute
+			GL.EnableVertexAttribArray(0);            
+		}
 
-            // Initialise MVP Matrix
-            float ar = (float)ClientSize.Width / (float)ClientSize.Height;
-            projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
-            Matrix4 MVP = modelMatrix4 * projectionMatrix4;
-            GL.UniformMatrix4(MVPLocation, false, ref MVP);
-            GL.UseProgram(0);
-        }
+		private void InitScene()
+		{
+			// Set up uniform locations
+			GL.UseProgram(program);
+			MVPLocation = GL.GetUniformLocation(program, "MVP");
+			translateLocation = GL.GetUniformLocation(program, "translate");
 
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
+			// Initialise MVP Matrix
+			float ar = (float)ClientSize.Width / (float)ClientSize.Height;
+			projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
+			modelViewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
+			MVP = modelViewMatrix4 * projectionMatrix4;
+			GL.UniformMatrix4(MVPLocation, false, ref MVP);
+			GL.UseProgram(0);
+		}
 
-            GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
 
-            // Update projection matrix for new window size
-            float ar = (float)ClientSize.Width / (float)ClientSize.Height;
-            projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-        }
+			GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
-        private void LoadShaders()
-        {
-            int status;
-            string shaderData = File.ReadAllText("./Shaders/vertex.glsl");
-            int vs = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(vs, shaderData);
-            GL.CompileShader(vs);
-            GL.GetShader(vs, ShaderParameter.CompileStatus, out status);
-            if (status != 1)
-            {
-                Debug.WriteLine(GL.GetShaderInfoLog(vs));
-                Exit();
-            }
+			// Update projection matrix for new window size
+			float ar = (float)ClientSize.Width / (float)ClientSize.Height;
+			projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
+		}
 
-            shaderData = File.ReadAllText("./Shaders/fragment.glsl");
-            int fs = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fs, shaderData);
-            GL.CompileShader(fs);
-            GL.GetShader(fs, ShaderParameter.CompileStatus, out status);
-            if (status != 1)
-            {
-                Debug.WriteLine(GL.GetShaderInfoLog(fs));
-                Exit();
-            }
+		private void LoadShaders()
+		{
+			int status;
 
-            program = GL.CreateProgram();
-            GL.AttachShader(program, vs);
-            GL.AttachShader(program, fs);
-            GL.LinkProgram(program);
-            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out status);
-            if (status != 1)
-            {
-                Debug.WriteLine(GL.GetProgramInfoLog(program));
-                Exit();
-            }
+			// Read and compile vertex shader
+			string shaderData = File.ReadAllText("./Shaders/vertex.glsl");
+			int vs = GL.CreateShader(ShaderType.VertexShader);
+			GL.ShaderSource(vs, shaderData);
+			GL.CompileShader(vs);
+			GL.GetShader(vs, ShaderParameter.CompileStatus, out status);
+			if (status != 1)
+			{
+				Trace.TraceInformation(GL.GetShaderInfoLog(vs));
+				Exit();
+			}
+			else
+			{
+				Trace.TraceInformation("Vertex Shader compiled OK...\n\n");
+			}
 
-            GL.DetachShader(program, vs);
-            GL.DetachShader(program, fs);
-        }
+			// Read and compile fragment shader
+			shaderData = File.ReadAllText("./Shaders/fragment.glsl");
+			int fs = GL.CreateShader(ShaderType.FragmentShader);
+			GL.ShaderSource(fs, shaderData);
+			GL.CompileShader(fs);
+			GL.GetShader(fs, ShaderParameter.CompileStatus, out status);
+			if (status != 1)
+			{
+				Trace.TraceInformation(GL.GetShaderInfoLog(fs));
+				Exit();
+			}
+			else
+			{
+				Trace.TraceInformation("Fragment Shader compiled OK...\n\n");
+			}
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
+			// Create and link shader program
+			program = GL.CreateProgram();
+			GL.AttachShader(program, vs);
+			GL.AttachShader(program, fs);
+			GL.LinkProgram(program);
+			GL.GetProgram(program, GetProgramParameterName.LinkStatus, out status);
+			if (status != 1)
+			{
+				Trace.TraceInformation(GL.GetProgramInfoLog(program));
+				Exit();
+			}
+			else
+			{
+				Trace.TraceInformation("Program linked OK...\n\n");
+			}
 
-            Keyboard.KeyDown += Keyboard_KeyDown;
+			// No need for the shaders now so just detach them
+			GL.DetachShader(program, vs);
+			GL.DetachShader(program, fs);
+		}
 
-            GenerateBuffers();
-            LoadShaders();
-            InitScene();
-        }
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
-        protected void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                Exit();
-            }
+			Keyboard.KeyDown += Keyboard_KeyDown;
 
-            if (e.Key == Key.F1)
-            {
-                if (isFullscreen == false)
-                {
-                    WindowState = WindowState.Fullscreen;
-                    isFullscreen = true;
-                }
-                else
-                {
-                    WindowState = WindowState.Normal;
-                    isFullscreen = false;
-                }
-            }
-        }
+			GenerateBuffers();
+			LoadShaders();
+			InitScene();
+		}
 
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
+		protected void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
+		{
+			if (e.Key == Key.Escape)
+			{
+				Exit();
+			}
 
-            GL.ClearColor(Color4.CornflowerBlue);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			// Press F1 to toggle full screen
+			if (e.Key == Key.F1)
+			{
+				if (isFullscreen == false)
+				{
+					WindowState = WindowState.Fullscreen;
+					isFullscreen = true;
+				}
+				else
+				{
+					WindowState = WindowState.Normal;
+					isFullscreen = false;
+				}
+			}
+		}
 
-            GL.UseProgram(program);
+		protected override void OnRenderFrame(FrameEventArgs e)
+		{
+			base.OnRenderFrame(e);
 
-            // Should really update the modelView matrix for this but want to keep it simple
-            Vector3 translate = new Vector3(-1.5f, 0.0f, -6.0f);
-            GL.Uniform3(translateLocation, ref translate);
+			GL.ClearColor(Color4.CornflowerBlue);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.BindVertexArray(triangleVao);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+			GL.UseProgram(program);
 
-            translate = new Vector3(1.5f, 0.0f, -6.0f);
-            GL.Uniform3(translateLocation, ref translate);
+			// Move triangle left 1.5 units from origin
+			MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * projectionMatrix4;
+			GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
-            GL.BindVertexArray(squareVao);
-            // We use a trianglestrip as quads are deprecated
-            GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
+			GL.BindVertexArray(triangleVao);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
-            GL.UseProgram(0);
+			// Move square right 1.5 units from origin
+			MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * projectionMatrix4;
+			GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
-            SwapBuffers();
-        }
+			// We use a trianglestrip as quads are deprecated
+			GL.BindVertexArray(squareVao);            
+			GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
-        {
-            base.OnUpdateFrame(e);
+			GL.UseProgram(0);
 
-            // Do amazing stuff here!
-        }
+			SwapBuffers();
+		}
 
-        [STAThread]
-        private static void Main()
-        {
-            //TextWriterTraceListener debugLog = new TextWriterTraceListener(Console.Out);
-            //Debug.Listeners.Add(debugLog);
+		protected override void OnUpdateFrame(FrameEventArgs e)
+		{
+			base.OnUpdateFrame(e);
 
-            using (Game game = new Game())
-            {
-                game.Run(60.0);
-            }
+			// Do amazing stuff here!
+		}
 
-            //debugLog.Flush();
-            //debugLog.Close();
-        }
-    }
+		[STAThread]
+		private static void Main()
+		{
+			TextWriterTraceListener listener = new TextWriterTraceListener("debugLog.log") { TraceOutputOptions = TraceOptions.DateTime };
+			Trace.Listeners.Add(listener);
+
+			using (Game game = new Game())
+			{
+				game.Run(60.0);
+			}
+
+			Trace.Flush();
+		}
+	}
 }
