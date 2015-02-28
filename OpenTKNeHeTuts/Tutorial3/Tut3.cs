@@ -228,14 +228,14 @@ namespace Tutorial3
             GL.UseProgram(program);
 
             // Move triangle left 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * modelViewMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
             // Move square right 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * modelViewMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             // We use a trianglestrip as quads are deprecated
