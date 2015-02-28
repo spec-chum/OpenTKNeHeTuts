@@ -76,7 +76,7 @@ namespace OpenTKNeHeTut2
             // Initialise MVP Matrix
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 1.0f, 0, 0, 0, 0, 1.0f, 0);
+            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
             Matrix4 MVP = modelMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
             GL.UseProgram(0);
