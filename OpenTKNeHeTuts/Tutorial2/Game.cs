@@ -10,14 +10,14 @@ namespace OpenTKNeHeTut2
 {
     internal class Game : GameWindow
     {
-        private float[] triangle =
+        private float[] triangleVerts =
         {
              0.0f, 1.0f, 0.0f,  // Top
             -1.0f,-1.0f, 0.0f,  // Bottom Left
              1.0f,-1.0f, 0.0f   // Bottom Right
         };
 
-        private float[] square =
+        private float[] squareVerts =
         {
             -1.0f, -1.0f, 0.0f, // Bottom left
             -1.0f,  1.0f, 0.0f, // Top left            
@@ -46,7 +46,7 @@ namespace OpenTKNeHeTut2
             // Vertices
             GL.GenBuffers(1, out triangleVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, triangleVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangle.Length * sizeof(float)), triangle, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleVerts.Length * sizeof(float)), triangleVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Enable the position attribute
@@ -59,7 +59,7 @@ namespace OpenTKNeHeTut2
             // Vertices
             GL.GenBuffers(1, out squareVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(square.Length * sizeof(float)), square, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVerts.Length * sizeof(float)), squareVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Enable the position attribute
@@ -110,7 +110,7 @@ namespace OpenTKNeHeTut2
             }
             else
             {
-                Trace.TraceInformation("Vertex Shader compiled OK...\n\n");
+                Trace.TraceInformation("Vertex Shader compiled OK...\n");
             }
 
             // Read and compile fragment shader
@@ -126,7 +126,7 @@ namespace OpenTKNeHeTut2
             }
             else
             {
-                Trace.TraceInformation("Fragment Shader compiled OK...\n\n");
+                Trace.TraceInformation("Fragment Shader compiled OK...\n");
             }
 
             // Create and link shader program
@@ -142,7 +142,7 @@ namespace OpenTKNeHeTut2
             }
             else
             {
-                Trace.TraceInformation("Program linked OK...\n\n");
+                Trace.TraceInformation("Program linked OK...\n");
             }
 
             // No need for the shaders now so just detach them
