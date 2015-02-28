@@ -38,7 +38,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="Tut1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
