@@ -11,7 +11,7 @@ using System.IO;
 // VBO	Vertex Buffer Object
 // MVP	Model View Position
 
-namespace OpenTKNeHeTut2
+namespace OpenTKNeHeTut3
 {
 	internal class Game : GameWindow
 	{
@@ -37,7 +37,7 @@ namespace OpenTKNeHeTut2
 		private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
 
 		public Game()
-			: base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
+			: base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 3")
 		{
 			VSync = VSyncMode.On;
 		}
