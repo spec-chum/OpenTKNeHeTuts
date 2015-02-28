@@ -6,10 +6,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-// Key:
-// VAO	Vertex Array Object
-// VBO	Vertex Buffer Object
-// MVP	Model View Position Matrix
+/// Key:
+/// VAO     Vertex Array Object
+/// VBO	    Vertex Buffer Object
+/// MVP	    Model View Position Matrix
 
 namespace OpenTKNeHeTut2
 {
@@ -17,9 +17,9 @@ namespace OpenTKNeHeTut2
     {
         private float[] triangleVerts =
         {
-             0.0f, 1.0f, 0.0f,  // Top
-            -1.0f,-1.0f, 0.0f,  // Bottom Left
-             1.0f,-1.0f, 0.0f   // Bottom Right
+             0.0f,  1.0f, 0.0f,  // Top
+            -1.0f, -1.0f, 0.0f,  // Bottom Left
+             1.0f, -1.0f, 0.0f   // Bottom Right
         };
 
         private float[] squareVerts =
