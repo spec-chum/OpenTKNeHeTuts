@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Tutorial1\Tutorial1.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="c:\Users\paul\Desktop\programming\daemon\OpenTKNeHeTuts\OpenTKNeHeTuts\Tutorial3\Game.cs">
+    <Files>
+      <File FileName="Tutorial1\Game.cs" Line="1" Column="1" />
+      <File FileName="Tutorial2\App.config" Line="5" Column="5" />
+      <File FileName="Tutorial2\packages.config" Line="1" Column="1" />
+      <File FileName="Tutorial2\Game.cs" Line="33" Column="33" />
+      <File FileName="c:\Users\paul\Desktop\programming\daemon\OpenTKNeHeTuts\OpenTKNeHeTuts\Tutorial3\Game.cs" Line="7" Column="7" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="c:\Users\paul\Desktop\programming\daemon\OpenTKNeHeTuts\OpenTKNeHeTuts\Tutorial3\Game.cs" line="16" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
