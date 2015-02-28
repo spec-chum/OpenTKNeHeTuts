@@ -29,7 +29,7 @@ namespace OpenTKNeHeTut2
         private int triangleVao, triangleVbo, squareVao, squareVbo;
         private int program;
         private int MVPLocation, translateLocation;
-        private Matrix4 projectionMatrix4, modelViewMatrix4;
+        private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
 
         public Game()
             : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
@@ -77,7 +77,7 @@ namespace OpenTKNeHeTut2
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
             modelViewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
-            Matrix4 MVP = modelViewMatrix4 * projectionMatrix4;
+            MVP = modelViewMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
             GL.UseProgram(0);
         }
@@ -175,18 +175,17 @@ namespace OpenTKNeHeTut2
 
             GL.UseProgram(program);
 
-            // Should really update the modelView matrix for this but want to keep it simple
-            Vector3 translate = new Vector3(-1.5f, 0.0f, -6.0f);
-            GL.Uniform3(translateLocation, ref translate);
+            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
-            translate = new Vector3(1.5f, 0.0f, -6.0f);
-            GL.Uniform3(translateLocation, ref translate);
+            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
-            GL.BindVertexArray(squareVao);
             // We use a trianglestrip as quads are deprecated
+            GL.BindVertexArray(squareVao);            
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 
             GL.UseProgram(0);
