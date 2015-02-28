@@ -5,7 +5,7 @@ using OpenTK.Input;
 using System;
 using System.Diagnostics;
 
-namespace OpenTKNeHeTut1
+namespace Tutorial1
 {
     internal class Game : GameWindow
     {
