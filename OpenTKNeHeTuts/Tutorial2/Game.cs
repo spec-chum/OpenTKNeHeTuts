@@ -19,14 +19,10 @@ namespace OpenTKNeHeTut2
 
         private float[] square =
         {
-             // We use 2 triangles as quads are deprecated
-            -1.0f,  1.0f, 0.0f, // Top left
             -1.0f, -1.0f, 0.0f, // Bottom left
-             1.0f,  1.0f, 0.0f, // Top right
-
-             1.0f,  1.0f, 0.0f, // Top right
-            -1.0f, -1.0f, 0.0f, // Bottom left
-             1.0f, -1.0f, 0.0f  // Bottom right
+            -1.0f,  1.0f, 0.0f, // Top left            
+             1.0f, -1.0f, 0.0f, // Bottom right
+             1.0f,  1.0f, 0.0f  // Top right             
         };
 
         private bool isFullscreen = false;
@@ -80,7 +76,7 @@ namespace OpenTKNeHeTut2
             // Initialise MVP Matrix
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 10.0f, 0, 0, 0, 0, 1.0f, 0);
+            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 1.0f, 0, 0, 0, 0, 1.0f, 0);
             Matrix4 MVP = modelMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
             GL.UseProgram(0);
@@ -190,7 +186,8 @@ namespace OpenTKNeHeTut2
             GL.Uniform3(translateLocation, ref translate);
 
             GL.BindVertexArray(squareVao);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+            // We use a trianglestrip as quads are deprecated
+            GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 
             GL.UseProgram(0);
 
