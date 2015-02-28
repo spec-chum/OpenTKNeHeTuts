@@ -5,10 +5,10 @@ using OpenTK.Input;
 using System;
 using System.Diagnostics;
 
-// Keys
+// Key:
 // VAO	Vertex Array Object
 // VBO	Vertex Buffer Object
-// MVP	Model View Position
+// MVP	Model View Position Matrix
 
 namespace OpenTKNeHeTut1
 {
