@@ -29,7 +29,7 @@ namespace OpenTKNeHeTut2
         private int triangleVao, triangleVbo, squareVao, squareVbo;
         private int program;
         private int MVPLocation, translateLocation;
-        private Matrix4 projectionMatrix4, modelMatrix4;
+        private Matrix4 projectionMatrix4, modelViewMatrix4;
 
         public Game()
             : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
@@ -76,8 +76,8 @@ namespace OpenTKNeHeTut2
             // Initialise MVP Matrix
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-            modelMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
-            Matrix4 MVP = modelMatrix4 * projectionMatrix4;
+            modelViewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
+            Matrix4 MVP = modelViewMatrix4 * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
             GL.UseProgram(0);
         }
@@ -204,16 +204,16 @@ namespace OpenTKNeHeTut2
         [STAThread]
         private static void Main()
         {
-            //TextWriterTraceListener debugLog = new TextWriterTraceListener(Console.Out);
-            //Debug.Listeners.Add(debugLog);
+            TextWriterTraceListener debugLog = new TextWriterTraceListener(Console.Out);
+            Debug.Listeners.Add(debugLog);
 
             using (Game game = new Game())
             {
                 game.Run(60.0);
             }
 
-            //debugLog.Flush();
-            //debugLog.Close();
+            debugLog.Flush();
+            debugLog.Close();
         }
     }
 }
