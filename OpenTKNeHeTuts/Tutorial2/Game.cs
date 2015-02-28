@@ -96,6 +96,8 @@ namespace OpenTKNeHeTut2
         private void LoadShaders()
         {
             int status;
+
+            // Read and compile vertex shader
             string shaderData = File.ReadAllText("./Shaders/vertex.glsl");
             int vs = GL.CreateShader(ShaderType.VertexShader);
             GL.ShaderSource(vs, shaderData);
@@ -103,10 +105,15 @@ namespace OpenTKNeHeTut2
             GL.GetShader(vs, ShaderParameter.CompileStatus, out status);
             if (status != 1)
             {
-                Debug.WriteLine(GL.GetShaderInfoLog(vs));
+                Trace.TraceInformation(GL.GetShaderInfoLog(vs));
                 Exit();
             }
+            else
+            {
+                Trace.TraceInformation("Vertex Shader compiled OK...\n\n");
+            }
 
+            // Read and compile fragment shader
             shaderData = File.ReadAllText("./Shaders/fragment.glsl");
             int fs = GL.CreateShader(ShaderType.FragmentShader);
             GL.ShaderSource(fs, shaderData);
@@ -114,10 +121,15 @@ namespace OpenTKNeHeTut2
             GL.GetShader(fs, ShaderParameter.CompileStatus, out status);
             if (status != 1)
             {
-                Debug.WriteLine(GL.GetShaderInfoLog(fs));
+                Trace.TraceInformation(GL.GetShaderInfoLog(fs));
                 Exit();
             }
+            else
+            {
+                Trace.TraceInformation("Fragment Shader compiled OK...\n\n");
+            }
 
+            // Create and link shader program
             program = GL.CreateProgram();
             GL.AttachShader(program, vs);
             GL.AttachShader(program, fs);
@@ -125,10 +137,15 @@ namespace OpenTKNeHeTut2
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out status);
             if (status != 1)
             {
-                Debug.WriteLine(GL.GetProgramInfoLog(program));
+                Trace.TraceInformation(GL.GetProgramInfoLog(program));
                 Exit();
             }
+            else
+            {
+                Trace.TraceInformation("Program linked OK...\n\n");
+            }
 
+            // No need for the shaders now so just detach them
             GL.DetachShader(program, vs);
             GL.DetachShader(program, fs);
         }
@@ -151,6 +168,7 @@ namespace OpenTKNeHeTut2
                 Exit();
             }
 
+            // Press F1 to toggle full screen
             if (e.Key == Key.F1)
             {
                 if (isFullscreen == false)
@@ -175,12 +193,14 @@ namespace OpenTKNeHeTut2
 
             GL.UseProgram(program);
 
+            // Move triangle left 1.5 units from origin
             MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
+            // Move square right 1.5 units from origin
             MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * projectionMatrix4;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
@@ -203,16 +223,15 @@ namespace OpenTKNeHeTut2
         [STAThread]
         private static void Main()
         {
-            TextWriterTraceListener debugLog = new TextWriterTraceListener(Console.Out);
-            Debug.Listeners.Add(debugLog);
+            TextWriterTraceListener listener = new TextWriterTraceListener("debugLog.log") { TraceOutputOptions = TraceOptions.DateTime };
+            Trace.Listeners.Add(listener);
 
             using (Game game = new Game())
             {
                 game.Run(60.0);
             }
 
-            debugLog.Flush();
-            debugLog.Close();
+            Trace.Flush();
         }
     }
 }
