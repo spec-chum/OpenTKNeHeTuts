@@ -33,7 +33,7 @@ namespace OpenTKNeHeTut2
         private bool isFullscreen = false;
         private int triangleVao, triangleVbo, squareVao, squareVbo;
         private int program;
-        private int MVPLocation, translateLocation;
+        private int MVPLocation;
         private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
 
         public Game()
@@ -76,7 +76,6 @@ namespace OpenTKNeHeTut2
             // Set up uniform locations
             GL.UseProgram(program);
             MVPLocation = GL.GetUniformLocation(program, "MVP");
-            translateLocation = GL.GetUniformLocation(program, "translate");
 
             // Initialise MVP Matrix
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
