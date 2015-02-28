@@ -22,7 +22,7 @@ namespace OpenTKNeHeTut3
              1.0f, -1.0f, 0.0f   // Bottom Right
         };
 
-        private float[] squareVert =
+        private float[] squareVerts =
         {
             -1.0f, -1.0f, 0.0f, // Bottom left
             -1.0f,  1.0f, 0.0f, // Top left            
@@ -64,7 +64,7 @@ namespace OpenTKNeHeTut3
             // Vertices
             GL.GenBuffers(1, out squareVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVert.Length * sizeof(float)), squareVert, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVerts.Length * sizeof(float)), squareVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Enable the position attribute
