@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.IO;
 
 /// Key:
-/// VAO  Vertex Array Object
-/// VBO  Vertex Buffer Object
-/// MVP  Model View Position Matrix
+/// VAO     Vertex Array Object
+/// VBO     Vertex Buffer Object
+/// MVP     Model View Position Matrix
 
 namespace OpenTKNeHeTut3
 {

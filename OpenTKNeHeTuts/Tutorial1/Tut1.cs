@@ -5,11 +5,6 @@ using OpenTK.Input;
 using System;
 using System.Diagnostics;
 
-// Key:
-// VAO	Vertex Array Object
-// VBO	Vertex Buffer Object
-// MVP	Model View Position Matrix
-
 namespace OpenTKNeHeTut1
 {
     internal class Game : GameWindow
