@@ -8,8 +8,7 @@ using System.IO;
 
 // Keys
 // VAO	Vertex Array Object
-// MAO	Matrix Arrat Object
-// VBO	Vertex Bind Object
+// VBO	Vertex Buffer Object
 // MVP	Model View Position
 
 namespace OpenTKNeHeTut2
