@@ -22,6 +22,13 @@ namespace OpenTKNeHeTut3
              1.0f, -1.0f, 0.0f   // Bottom Right
         };
 
+        private float[] triangleColours = 
+        {
+            1.0f, 0.0f, 0.0f,   // Red
+            0.0f, 1.0f, 0.0f,   // Green
+            0.0f, 0.0f, 1.0f    // Blue
+        };
+
         private float[] squareVerts =
         {
             -1.0f, -1.0f, 0.0f, // Bottom left
@@ -30,8 +37,17 @@ namespace OpenTKNeHeTut3
              1.0f,  1.0f, 0.0f  // Top right             
         };
 
+        private float[] squareColours = 
+        {
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f    // Blue            
+        };
+
         private bool isFullscreen = false;
-        private int triangleVao, triangleVbo, squareVao, squareVbo;
+        private int triangleVao, triangleVbo, triangleColoursVbo;
+        private int squareVao, squareVbo, squareColoursVbo;
         private int program;
         private int MVPLocation;
         private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
@@ -44,31 +60,45 @@ namespace OpenTKNeHeTut3
 
         private void GenerateBuffers()
         {
-            // Generate Vertex array object
+            // Generate Vertex Array Object
             GL.GenVertexArrays(1, out triangleVao);
             GL.BindVertexArray(triangleVao);
 
-            // Vertices
+            // Triangle vertices
             GL.GenBuffers(1, out triangleVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, triangleVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleVerts.Length * sizeof(float)), triangleVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attribute
-            GL.EnableVertexAttribArray(0);
+            // Triangle colours
+            GL.GenBuffers(1, out triangleColoursVbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, triangleColoursVbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleColours.Length * sizeof(float)), triangleColours, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Generate Vertex array object
+            // Enable the position attributes
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
+
+            // Generate Vertex Array Object
             GL.GenVertexArrays(1, out squareVao);
             GL.BindVertexArray(squareVao);
 
-            // Vertices
+            // Square vertices
             GL.GenBuffers(1, out squareVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVerts.Length * sizeof(float)), squareVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attribute
-            GL.EnableVertexAttribArray(0);            
+            // Square colours
+            GL.GenBuffers(1, out squareColoursVbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, squareColoursVbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareColours.Length * sizeof(float)), squareColours, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            // Enable the attributes
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
         }
 
         private void InitScene()
