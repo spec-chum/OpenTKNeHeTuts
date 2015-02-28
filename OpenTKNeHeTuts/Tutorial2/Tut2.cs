@@ -11,7 +11,7 @@ using System.IO;
 /// VBO	    Vertex Buffer Object
 /// MVP	    Model View Position Matrix
 
-namespace OpenTKNeHeTut2
+namespace Tutorial2
 {
     internal class Game : GameWindow
     {
