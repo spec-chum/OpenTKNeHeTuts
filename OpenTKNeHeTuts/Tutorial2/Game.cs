@@ -6,6 +6,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+// Keys
+// VAO	Vertex Array Object
+// MAO	Matrix Arrat Object
+// VBO	Vertex Bind Object
+// MVP	Model View Position
+
 namespace OpenTKNeHeTut2
 {
     internal class Game : GameWindow
