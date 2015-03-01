@@ -144,7 +144,7 @@ namespace Tutorial3
             }
             else
             {
-                Trace.TraceInformation("Vertex Shader compiled OK...\n\n");
+                Trace.TraceInformation("Vertex Shader compiled OK...\n");
             }
 
             // Read and compile fragment shader
@@ -160,7 +160,7 @@ namespace Tutorial3
             }
             else
             {
-                Trace.TraceInformation("Fragment Shader compiled OK...\n\n");
+                Trace.TraceInformation("Fragment Shader compiled OK...\n");
             }
 
             // Create and link shader program
@@ -176,7 +176,7 @@ namespace Tutorial3
             }
             else
             {
-                Trace.TraceInformation("Program linked OK...\n\n");
+                Trace.TraceInformation("Program linked OK...\n");
             }
 
             // No need for the shaders now so just detach them
