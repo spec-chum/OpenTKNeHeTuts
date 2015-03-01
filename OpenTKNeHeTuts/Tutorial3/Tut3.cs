@@ -46,8 +46,8 @@ namespace Tutorial3
         };
 
         private bool isFullscreen = false;
-        private int triangleVao, triangleVbo, triangleColoursVbo;
-        private int squareVao, squareVbo, squareColoursVbo;
+        private int triangleVao;
+        private int squareVao;
         private int program;
         private int MVPLocation;
         private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
@@ -61,6 +61,7 @@ namespace Tutorial3
         private void GenerateBuffers()
         {
             // Generate Vertex Array Object
+            int triangleVbo;
             GL.GenVertexArrays(1, out triangleVao);
             GL.BindVertexArray(triangleVao);
 
@@ -71,12 +72,13 @@ namespace Tutorial3
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Triangle colours
+            int triangleColoursVbo;
             GL.GenBuffers(1, out triangleColoursVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, triangleColoursVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleColours.Length * sizeof(float)), triangleColours, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attributes
+            // Enable the attributes
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
 
@@ -85,12 +87,14 @@ namespace Tutorial3
             GL.BindVertexArray(squareVao);
 
             // Square vertices
+            int squareVbo;
             GL.GenBuffers(1, out squareVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVerts.Length * sizeof(float)), squareVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             // Square colours
+            int squareColoursVbo;
             GL.GenBuffers(1, out squareColoursVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareColoursVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareColours.Length * sizeof(float)), squareColours, BufferUsageHint.StaticDraw);
