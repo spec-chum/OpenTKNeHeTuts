@@ -30,11 +30,10 @@ namespace Tutorial2
              1.0f,  1.0f, 0.0f  // Top right             
         };
 
-        private bool isFullscreen = false;
         private int triangleVao, triangleVbo, squareVao, squareVbo;
         private int program;
         private int MVPLocation;
-        private Matrix4 projectionMatrix4, modelViewMatrix4, MVP;
+        private Matrix4 projectionMatrix4, viewMatrix4, VP, MVP;
 
         public Game()
             : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
@@ -76,14 +75,13 @@ namespace Tutorial2
             // Set up uniform locations
             GL.UseProgram(program);
             MVPLocation = GL.GetUniformLocation(program, "MVP");
+            GL.UseProgram(0);
 
             // Initialise MVP Matrix
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
-            modelViewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
-            MVP = modelViewMatrix4 * projectionMatrix4;
-            GL.UniformMatrix4(MVPLocation, false, ref MVP);
-            GL.UseProgram(0);
+            viewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
+            VP = viewMatrix4 * projectionMatrix4;       
         }
 
         protected override void OnResize(EventArgs e)
@@ -95,6 +93,7 @@ namespace Tutorial2
             // Update projection matrix for new window size
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
+            VP = viewMatrix4 * projectionMatrix4;
         }
 
         private void LoadShaders()
@@ -150,8 +149,8 @@ namespace Tutorial2
             }
 
             // No need for the shaders now so just detach them
-            GL.DetachShader(program, vs);
-            GL.DetachShader(program, fs);
+            GL.DeleteShader(vs);
+            GL.DeleteShader(fs);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -175,15 +174,13 @@ namespace Tutorial2
             // Press F1 to toggle full screen
             if (e.Key == Key.F1)
             {
-                if (isFullscreen == false)
+                if (WindowState == WindowState.Normal)
                 {
                     WindowState = WindowState.Fullscreen;
-                    isFullscreen = true;
                 }
                 else
                 {
                     WindowState = WindowState.Normal;
-                    isFullscreen = false;
                 }
             }
         }
@@ -198,14 +195,14 @@ namespace Tutorial2
             GL.UseProgram(program);
 
             // Move triangle left 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
             // Move square right 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * projectionMatrix4;
+            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             // We use a trianglestrip as quads are deprecated
@@ -215,6 +212,13 @@ namespace Tutorial2
             GL.UseProgram(0);
 
             SwapBuffers();
+        }
+        
+        protected override void OnUnload(EventArgs e)
+        {
+            base.OnUnload(e);
+
+            GL.DeleteProgram(program);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -232,6 +236,7 @@ namespace Tutorial2
 
             using (Game game = new Game())
             {
+                // Run at 60FPS
                 game.Run(60.0);
             }
 
