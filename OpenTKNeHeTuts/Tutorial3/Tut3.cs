@@ -45,7 +45,6 @@ namespace Tutorial3
             0.0f, 0.0f, 1.0f    // Blue            
         };
 
-        private bool isFullscreen = false;
         private int triangleVao;
         private int squareVao;
         private int program;
@@ -182,10 +181,6 @@ namespace Tutorial3
             {
                 Trace.TraceInformation("Program linked OK...\n");
             }
-
-            // No need for the shaders now so just detach them
-            GL.DetachShader(program, vs);
-            GL.DetachShader(program, fs);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -209,15 +204,13 @@ namespace Tutorial3
             // Press F1 to toggle full screen
             if (e.Key == Key.F1)
             {
-                if (isFullscreen == false)
+                if (WindowState == WindowState.Normal)
                 {
                     WindowState = WindowState.Fullscreen;
-                    isFullscreen = true;
                 }
                 else
                 {
                     WindowState = WindowState.Normal;
-                    isFullscreen = false;
                 }
             }
         }
