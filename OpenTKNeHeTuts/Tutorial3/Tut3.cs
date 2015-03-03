@@ -1,10 +1,10 @@
-﻿using OpenTK;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
-using System;
-using System.Diagnostics;
-using System.IO;
 
 /// Key:
 /// VAO     Vertex Array Object
