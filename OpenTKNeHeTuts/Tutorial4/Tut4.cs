@@ -46,8 +46,8 @@ namespace Tutorial4
         private int program;
         private int MVPLocation;
         private Matrix4 projectionMatrix4, viewMatrix4, VP, MVP;
-        private float rotationTriangle;
-        private float rotationQuad;
+        private float triangleAngle;
+        private float quadAngle;
 
         public Game()
             : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 4")
@@ -234,7 +234,7 @@ namespace Tutorial4
             GL.UseProgram(program);
 
             // Rotate at origin using the value of rotationTriangle then move triangle left 1.5 units from origin.
-            Matrix4 rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitY, rotationTriangle);
+            Matrix4 rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitY, triangleAngle);
             Matrix4 translation = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f);
             MVP = rotation * translation * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
@@ -243,7 +243,7 @@ namespace Tutorial4
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
             // Rotate at origin using the value of rotationQuad then move triangle right 1.5 units from origin.
-            rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitY, rotationQuad);
+            rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitX, quadAngle);
             translation = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f);
             MVP = rotation * translation * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
@@ -254,10 +254,6 @@ namespace Tutorial4
 
             GL.UseProgram(0);
 
-            // Increment rotational values for the next draw
-            rotationTriangle += 0.2f;
-            rotationQuad -= 0.15f;
-
             SwapBuffers();
         }
 
@@ -265,7 +261,11 @@ namespace Tutorial4
         {
             base.OnUpdateFrame(e);
 
-            // Do amazing stuff here!
+            // Increment rotational values for the next draw
+            triangleAngle += 0.2f;
+            quadAngle -= 0.15f;
+
+            // Do other amazing stuff here!
         }
 
         [STAThread]
