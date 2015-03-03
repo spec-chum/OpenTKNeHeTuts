@@ -233,7 +233,7 @@ namespace Tutorial4
 
             GL.UseProgram(program);
 
-            // Rotate at origin using the value of rotationTriangle then move triangle left 1.5 units from origin.
+            // Rotate at origin using the value of triangleAngle then move triangle left 1.5 units from origin.
             Matrix4 rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitY, triangleAngle);
             Matrix4 translation = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f);
             MVP = rotation * translation * VP;
@@ -242,7 +242,7 @@ namespace Tutorial4
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
-            // Rotate at origin using the value of rotationQuad then move triangle right 1.5 units from origin.
+            // Rotate at origin using the value of quadAngle then move triangle right 1.5 units from origin.
             rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitX, quadAngle);
             translation = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f);
             MVP = rotation * translation * VP;
