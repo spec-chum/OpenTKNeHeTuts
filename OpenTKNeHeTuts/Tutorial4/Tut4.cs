@@ -6,6 +6,10 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
+/// Key:
+/// VAO     Vertex Array Object
+/// VBO     Vertex Buffer Object
+/// MVP     Model View Position Matrix
 
 namespace Tutorial4
 {
