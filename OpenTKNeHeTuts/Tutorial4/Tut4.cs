@@ -8,10 +8,10 @@ using OpenTK.Input;
 
 /// Key:
 /// VAO     Vertex Array Object
-/// VBO	    Vertex Buffer Object
-/// MVP	    Model View Position Matrix
+/// VBO     Vertex Buffer Object
+/// MVP     Model View Position Matrix
 
-namespace Tutorial2
+namespace Tutorial4
 {
     internal class Game : GameWindow
     {
@@ -22,6 +22,13 @@ namespace Tutorial2
              1.0f, -1.0f, 0.0f   // Bottom Right
         };
 
+        private float[] triangleColours = 
+        {
+            1.0f, 0.0f, 0.0f,   // Red
+            0.0f, 1.0f, 0.0f,   // Green
+            0.0f, 0.0f, 1.0f    // Blue
+        };
+
         private float[] squareVerts =
         {
             -1.0f, -1.0f, 0.0f, // Bottom left
@@ -30,45 +37,75 @@ namespace Tutorial2
              1.0f,  1.0f, 0.0f  // Top right             
         };
 
-        private int triangleVao, triangleVbo, squareVao, squareVbo;
+        private float[] squareColours = 
+        {
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f,   // Blue
+            0.0f, 0.0f, 1.0f    // Blue            
+        };
+
+        private int triangleVao;
+        private int squareVao;
         private int program;
         private int MVPLocation;
         private Matrix4 projectionMatrix4, viewMatrix4, VP, MVP;
+        private float triangleAngle;
+        private float quadAngle;
 
         public Game()
-            : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 2")
+            : base(640, 480, GraphicsMode.Default, "OpenTK NeHe Tutorial 4")
         {
             VSync = VSyncMode.On;
         }
 
         private void GenerateBuffers()
         {
-            // Generate Vertex array object
+            // Generate Vertex Array Object
+            int triangleVbo;
             GL.GenVertexArrays(1, out triangleVao);
             GL.BindVertexArray(triangleVao);
 
-            // Vertices
+            // Triangle vertices
             GL.GenBuffers(1, out triangleVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, triangleVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleVerts.Length * sizeof(float)), triangleVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attribute
+            // Triangle colours
+            int triangleColoursVbo;
+            GL.GenBuffers(1, out triangleColoursVbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, triangleColoursVbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(triangleColours.Length * sizeof(float)), triangleColours, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            // Enable the attributes
             GL.EnableVertexAttribArray(0);
-            
-            // Generate Vertex array object
+            GL.EnableVertexAttribArray(1);
+
+            // Generate Vertex Array Object
             GL.GenVertexArrays(1, out squareVao);
             GL.BindVertexArray(squareVao);
 
-            // Vertices
+            // Square vertices
+            int squareVbo;
             GL.GenBuffers(1, out squareVbo);
             GL.BindBuffer(BufferTarget.ArrayBuffer, squareVbo);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareVerts.Length * sizeof(float)), squareVerts, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            // Enable the position attribute
-            GL.EnableVertexAttribArray(0);            
+            // Square colours
+            int squareColoursVbo;
+            GL.GenBuffers(1, out squareColoursVbo);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, squareColoursVbo);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(squareColours.Length * sizeof(float)), squareColours, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+            // Enable the attributes
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
         }
+
 
         private void InitScene()
         {
@@ -81,7 +118,7 @@ namespace Tutorial2
             float ar = (float)ClientSize.Width / (float)ClientSize.Height;
             projectionMatrix4 = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, ar, 0.1f, 1000.0f);
             viewMatrix4 = Matrix4.LookAt(0, 0.0f, 0.1f, 0, 0, 0, 0, 1.0f, 0);
-            VP = viewMatrix4 * projectionMatrix4;       
+            VP = viewMatrix4 * projectionMatrix4;
         }
 
         protected override void OnResize(EventArgs e)
@@ -148,7 +185,6 @@ namespace Tutorial2
                 Trace.TraceInformation("Program linked OK...\n");
             }
 
-            // No need for the shaders now so just detach them
             GL.DeleteShader(vs);
             GL.DeleteShader(fs);
         }
@@ -185,6 +221,13 @@ namespace Tutorial2
             }
         }
 
+        protected override void OnUnload(EventArgs e)
+        {
+            base.OnUnload(e);
+
+            GL.DeleteProgram(program);
+        }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -194,38 +237,39 @@ namespace Tutorial2
 
             GL.UseProgram(program);
 
-            // Move triangle left 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f) * VP;
+            // Rotate at origin using the value of triangleAngle then move triangle left 1.5 units from origin.
+            Matrix4 rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitY, triangleAngle);
+            Matrix4 translation = Matrix4.CreateTranslation(-1.5f, 0.0f, -6.0f);
+            MVP = rotation * translation * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             GL.BindVertexArray(triangleVao);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
-            // Move square right 1.5 units from origin
-            MVP = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f) * VP;
+            // Rotate at origin using the value of quadAngle then move triangle right 1.5 units from origin.
+            rotation = Matrix4.CreateFromAxisAngle(Vector3.UnitX, quadAngle);
+            translation = Matrix4.CreateTranslation(1.5f, 0.0f, -6.0f);
+            MVP = rotation * translation * VP;
             GL.UniformMatrix4(MVPLocation, false, ref MVP);
 
             // We use a trianglestrip as quads are deprecated
-            GL.BindVertexArray(squareVao);            
+            GL.BindVertexArray(squareVao);
             GL.DrawArrays(PrimitiveType.TriangleStrip, 0, 4);
 
             GL.UseProgram(0);
 
             SwapBuffers();
         }
-        
-        protected override void OnUnload(EventArgs e)
-        {
-            base.OnUnload(e);
-
-            GL.DeleteProgram(program);
-        }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
 
-            // Do amazing stuff here!
+            // Increment rotational values for the next draw
+            triangleAngle += 0.2f;
+            quadAngle -= 0.15f;
+
+            // Do other amazing stuff here!
         }
 
         [STAThread]
