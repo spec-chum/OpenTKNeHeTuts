@@ -266,8 +266,8 @@ namespace Tutorial4
             base.OnUpdateFrame(e);
 
             // Increment rotational values for the next draw
-            triangleAngle += 0.2f;
-            quadAngle -= 0.15f;
+            triangleAngle += 2.0f * (float)e.Time;
+            quadAngle -= 1.5f * (float)e.Time;
 
             // Do other amazing stuff here!
         }
