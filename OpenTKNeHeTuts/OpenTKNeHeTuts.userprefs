@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="Tutorial1\Tutorial1.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tutorial3\Tut3.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tutorial4\packages.config">
     <Files>
-      <File FileName="Tutorial1\Tut1.cs" Line="1" Column="1" />
-      <File FileName="Tutorial3\Tut3.cs" Line="4" Column="4" />
+      <File FileName="Tutorial4\Tut4.cs" Line="1" Column="1" />
+      <File FileName="Tutorial4\packages.config" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
