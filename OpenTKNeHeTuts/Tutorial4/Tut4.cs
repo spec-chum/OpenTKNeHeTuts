@@ -106,7 +106,6 @@ namespace Tutorial4
 			GL.EnableVertexAttribArray(1);
 		}
 
-
 		private void InitScene()
 		{
 			// Set up uniform locations
